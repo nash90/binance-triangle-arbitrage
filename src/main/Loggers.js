@@ -26,6 +26,7 @@ const Loggers = {
     'performance': pino(PINO_OPTS, pino.destination(`${LOG_DIR}/performance.log`)),
     'execution': pino(PINO_OPTS, pino.destination(`${LOG_DIR}/execution.log`)),
     'binance': pino(PINO_OPTS, pino.destination(`${LOG_DIR}/binance.log`)),
+    'validpairs': pino(PINO_OPTS, pino.destination(`${LOG_DIR}/validpairs.log`)),
 };
 
 module.exports = Loggers;

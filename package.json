@@ -13,11 +13,13 @@
     "npm": "6.14.5"
   },
   "scripts": {
-    "start": "node src/main/Main.js"
+    "start": "node src/main/Main.js",
+    "start:dev": "nodemon src/main/Main.js"
   },
   "dependencies": {
     "blessed": "^0.1.81",
     "node-binance-api": "^0.11.11",
+    "nodemon": "^2.0.4",
     "pino": "^6.5.0",
     "pino-pretty": "^4.1.0",
     "systeminformation": "^4.27.3"

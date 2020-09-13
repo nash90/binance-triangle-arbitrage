@@ -15,6 +15,7 @@ let recentCalculationTimes = [];
 logger.binance.info(logger.LINE);
 logger.execution.info(logger.LINE);
 logger.performance.info(logger.LINE);
+logger.validpairs.info(logger.LINE);
 
 if (CONFIG.TRADING.ENABLED) console.log(`WARNING! Order execution is enabled!\n`);
 
@@ -74,10 +75,36 @@ function calculateArbitrage() {
     );
 
     recentCalculationTimes.push(calculationTime);
-    if (CONFIG.HUD.ENABLED) refreshHUD(results);
+    if (CONFIG.HUD.DISPLAY_ENABLED) refreshHUD(results);
+    if (CONFIG.LOG.VALID_PAIRS_PRINT) displayProfitablePairs(results);
 
     displayCalculationResults(successCount, errorCount, calculationTime);
     setTimeout(calculateArbitrage, CONFIG.TIMING.CALCULATION_COOLDOWN);
+}
+
+function displayProfitablePairs(arbs) {
+    //let tableData = [HUD.headers.arb];
+    const arbs_list = Object.values(arbs)
+    .sort((a, b) => a.percent > b.percent ? -1 : 1)
+    .slice(0, CONFIG.HUD.ARB_COUNT);
+
+    const now = Date.now();
+    // console.log("Displaying profitable pairs!!");
+    arbs_list.forEach(arb => {
+        let profit_per = arb.percent.toFixed(4);
+        // console.log(`profit per : ${profit_per}`);        
+        
+        if (profit_per > CONFIG.TRADING.PROFIT_THRESHOLD) {
+            let log_line = `${arb.trade.symbol.a}-${arb.trade.symbol.b}-${arb.trade.symbol.c},  \
+${profit_per}%, \
+${((now - arb.depth.ab.eventTime)/1000).toFixed(2)},  \
+${((now - arb.depth.bc.eventTime)/1000).toFixed(2)},  \
+${((now - arb.depth.ca.eventTime)/1000).toFixed(2)},  \
+${((now - Math.min(arb.depth.ab.eventTime, arb.depth.bc.eventTime, arb.depth.ca.eventTime))/1000).toFixed(2)}`;
+            // console.log(log_line);
+            logger.validpairs.debug(log_line);
+        }
+    });
 }
 
 function displayCalculationResults(successCount, errorCount, calculationTime) {
