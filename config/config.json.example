@@ -24,13 +24,15 @@
     },
 
     "HUD": {
+        "DISPLAY_ENABLED": false,
         "ENABLED": true,
         "ARB_COUNT": 10
     },
 
     "LOG": {
         "LEVEL": "debug",
-        "PRETTY_PRINT": true
+        "PRETTY_PRINT": true,
+        "VALID_PAIRS_PRINT": true
     },
 
     "DEPTH": {
